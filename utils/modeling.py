@@ -88,14 +88,12 @@ def explain_linear(bundle: dict, row: pd.DataFrame, top_n: int = 5) -> list[dict
         values = transformed.toarray().ravel() if hasattr(transformed, "toarray") else np.asarray(transformed).ravel()
         contributions = values * model.coef_.ravel()
     else:
-        # Exact TreeSHAP contributions for LightGBM; gracefully degrade to global
-        # importances only if SHAP is unavailable at prediction time.
+        # LightGBM's native pred_contrib output is TreeSHAP-compatible and avoids
+        # shipping the large optional SHAP package with the production API image.
         try:
-            import shap
-            values = shap.TreeExplainer(model).shap_values(transformed)
-            if isinstance(values, list): values = values[-1]
-            if hasattr(values, "toarray"): values = values.toarray()
-            contributions = np.asarray(values).ravel()
+            native_values = model.booster_.predict(transformed, pred_contrib=True)
+            if hasattr(native_values, "toarray"): native_values = native_values.toarray()
+            contributions = np.asarray(native_values).ravel()[:-1]
         except Exception:
             values = transformed.toarray().ravel() if hasattr(transformed, "toarray") else np.asarray(transformed).ravel()
             contributions = values * np.asarray(getattr(model, "feature_importances_", np.zeros(len(names))))

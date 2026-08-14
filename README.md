@@ -43,7 +43,7 @@ Install Ollama, run `ollama pull llama3.1:8b`, then set `$env:USE_OLLAMA='true'`
 
 ## Cloud portfolio deployment
 
-This project deploys as two services: Streamlit Community Cloud hosts the UI, while a Docker host such as Render hosts FastAPI and the trained model. Local Ollama remains a local-demo feature; the deployed API uses the approved-rules fallback unless an Ollama service is configured.
+This project deploys as two services: Streamlit Community Cloud hosts the UI, while a Docker host such as Render hosts FastAPI and the trained model. The production API uses LightGBM's native contribution output, keeping the Docker image compact. Local Ollama remains a local-demo feature; the deployed API uses the approved-rules fallback unless an Ollama service is configured.
 
 1. Create a GitHub repository and push this project, including `models/champion.joblib`, `reports/scored_customers.csv`, and `data/raw/cell2celltrain.csv`.
 2. In Render, create a Blueprint from the repository. It detects `render.yaml`; once deployed, copy its HTTPS URL.
