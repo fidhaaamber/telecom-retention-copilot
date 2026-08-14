@@ -1,0 +1,16 @@
+.venv/
+.capstone-venv/
+.capstone-py312/
+__pycache__/
+.pytest_cache/
+logs/
+*.pyc
+data/*.zip
+data/processed/
+# The compact champion model is intentionally versioned for cloud API deployment.
+!models/champion.joblib
+models/*.json
+reports/*.html
+# The work-queue CSV is intentionally versioned for the cloud UI.
+!reports/scored_customers.csv
+.streamlit/secrets.toml

@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: telecom-retention-api
+    runtime: docker
+    healthCheckPath: /health
+    dockerfilePath: ./Dockerfile

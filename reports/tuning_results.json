@@ -1,0 +1,34 @@
+{
+  "best_cv_pr_auc": 0.45966,
+  "best_params": {
+    "model__colsample_bytree": 0.6809723757181718,
+    "model__learning_rate": 0.03165854330562734,
+    "model__min_child_samples": 81,
+    "model__n_estimators": 545,
+    "model__num_leaves": 35,
+    "model__reg_alpha": 0.194338644844741,
+    "model__reg_lambda": 0.7783725794347397,
+    "model__subsample": 0.9400581282031752
+  },
+  "validation_threshold": {
+    "threshold": 0.4,
+    "validation_f1": 0.5065
+  },
+  "untouched_test": {
+    "model": "lightgbm_tuned",
+    "pr_auc": 0.455922857873191,
+    "roc_auc": 0.6792777686529554,
+    "recall": 0.7872195785180149,
+    "precision": 0.3639220615964802,
+    "f1": 0.4977433913604126,
+    "accuracy": 0.5422135161606269
+  },
+  "conservative_accuracy_mode": {
+    "threshold": 0.71,
+    "accuracy": 0.71959,
+    "recall": 0.11455,
+    "precision": 0.56639,
+    "f1": 0.19056
+  },
+  "overfit_gap_pr_auc": 0.00374
+}
