@@ -13,13 +13,19 @@ def bundle():
     if not BUNDLE_PATH.exists(): raise HTTPException(503, "Model unavailable. Run: python scripts/train.py")
     return joblib.load(BUNDLE_PATH)
 def score(customer):
-    b = bundle(); features = engineer_features(pd.DataFrame([customer]))
-    for col in b["feature_columns"]:
-        if col not in features: features[col] = None
-    features = features[b["feature_columns"]]
-    probability = float(b["pipeline"].predict_proba(features)[0, 1]); threshold = b["threshold"]["threshold"]
-    band = "High" if probability >= .60 else "Medium" if probability >= .30 else "Low"
-    return PredictionResponse(churn_probability=round(probability, 5), risk_band=band, decision_threshold=threshold, drivers=explain_linear(b, features))
+    try:
+        b = bundle(); features = engineer_features(pd.DataFrame([customer]))
+        for col in b["feature_columns"]:
+            if col not in features: features[col] = None
+        features = features[b["feature_columns"]]
+        probability = float(b["pipeline"].predict_proba(features)[0, 1]); threshold = b["threshold"]["threshold"]
+        band = "High" if probability >= .60 else "Medium" if probability >= .30 else "Low"
+        return PredictionResponse(churn_probability=round(probability, 5), risk_band=band, decision_threshold=threshold, drivers=explain_linear(b, features))
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        raise HTTPException(status_code=500, detail=f"Scoring error: {str(e)} | {traceback.format_exc()}")
 @app.get("/health")
 def health(): return {"status": "ok", "model_loaded": BUNDLE_PATH.exists()}
 @app.get("/")
