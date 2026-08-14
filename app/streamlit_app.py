@@ -16,7 +16,10 @@ def request(path, customer):
     if not API:
         st.error("API URL is not configured. Set API_URL in Streamlit secrets.")
         return None
-    try: return httpx.post(f"{API.rstrip('/')}{path}", json={"customer": customer}, timeout=20).json()
+    try:
+        res = httpx.post(f"{API.rstrip('/')}{path}", json={"customer": customer}, timeout=20)
+        res.raise_for_status()
+        return res.json()
     except Exception as exc: st.error(f"API unavailable: {exc}."); return None
 
 page = st.sidebar.radio("Screen", ["Portfolio & EDA", "Single Customer Risk", "High-Risk Work Queue", "Retention Copilot"])
