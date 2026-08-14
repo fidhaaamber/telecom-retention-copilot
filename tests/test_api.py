@@ -14,5 +14,9 @@ def test_health():
     response = client.get("/health")
     assert response.status_code == 200
     assert "model_loaded" in response.json()
+def test_root():
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json()["service"] == "Telecom Retention Copilot API"
 def test_invalid_batch():
     assert client.post("/predict/batch", json=[]).status_code == 422

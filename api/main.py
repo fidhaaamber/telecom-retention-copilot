@@ -22,6 +22,9 @@ def score(customer):
     return PredictionResponse(churn_probability=round(probability, 5), risk_band=band, decision_threshold=threshold, drivers=explain_linear(b, features))
 @app.get("/health")
 def health(): return {"status": "ok", "model_loaded": BUNDLE_PATH.exists()}
+@app.get("/")
+def root():
+    return {"service": "Telecom Retention Copilot API", "status": "ok", "health": "/health", "documentation": "/docs"}
 @app.post("/predict", response_model=PredictionResponse)
 def predict(request: CustomerRecord): return score(request.customer)
 @app.post("/predict/batch", response_model=list[PredictionResponse])
